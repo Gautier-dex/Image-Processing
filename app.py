@@ -10,6 +10,30 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Force la sidebar ouverte via JS au premier chargement
+# (Streamlit Cloud ignore parfois initial_sidebar_state)
+st.markdown("""
+<script>
+window.addEventListener('load', function() {
+    function openSidebar() {
+        // Cherche le bouton "ouvrir" quand la sidebar est fermée
+        var btns = window.parent.document.querySelectorAll(
+            '[data-testid="collapsedControl"] button, ' +
+            '[data-testid="stSidebarCollapseButton"] button'
+        );
+        btns.forEach(function(btn) {
+            var expanded = btn.getAttribute('aria-expanded');
+            if (expanded === 'false' || expanded === null) {
+                btn.click();
+            }
+        });
+    }
+    setTimeout(openSidebar, 500);
+    setTimeout(openSidebar, 1500);
+});
+</script>
+""", unsafe_allow_html=True)
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -119,7 +143,6 @@ st.markdown("""
 }
 
 .stSpinner > div { border-top-color: #7c6af7 !important; }
-
 [data-testid="column"] {
     display: flex !important;
     flex-direction: column !important;
