@@ -64,10 +64,12 @@ st.markdown("""
     display: block !important;
     min-width: 240px !important;
 }
-/* Force the sidebar toggle button to always show "open" state */
+/* Hide the sidebar toggle button */
 [data-testid="stSidebarCollapseButton"] {
-    visibility: visible !important;
-    opacity: 1 !important;
+    display: none !important;
+}
+button[data-testid="baseButton-header"] {
+    display: none !important;
 }
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span {
