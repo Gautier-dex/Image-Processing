@@ -1,29 +1,28 @@
 #ifndef BMP24_PARTIE2_H
 #define BMP24_PARTIE2_H
+
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h> // Ajouté pour malloc/free
+
 // Constantes pour les offsets des champs de l'en-tête BMP
-#define BITMAP_MAGIC       0x00 // offset 0
-#define BITMAP_SIZE        0x02 // offset 2
-#define BITMAP_OFFSET      0x0A // offset 10
-#define BITMAP_WIDTH       0x12 // offset 18
-#define BITMAP_HEIGHT      0x16 // offset 22
-#define BITMAP_DEPTH       0x1C // offset 28
+#define BITMAP_MAGIC       0x00
+#define BITMAP_SIZE        0x02
+#define BITMAP_OFFSET      0x0A
+#define BITMAP_WIDTH       0x12
+#define BITMAP_HEIGHT      0x16
+#define BITMAP_DEPTH       0x1C
+#define BITMAP_SIZE_RAW    0x22
 
-#define BITMAP_SIZE_RAW    0x22 // offset 34
-
-// Constante pour le type de fichier BMP
+// Constante pour le type BMP
 #define BMP_TYPE           0x4D42 // 'BM' en hexadécimal
 
-// Constantes pour les tailles des champs de l'en-tête BMP
+// Constantes pour les tailles d'en-têtes
 #define HEADER_SIZE        0x0E // 14 octets
 #define INFO_SIZE          0x28 // 40 octets
+#define DEFAULT_DEPTH      0x18 // 24 bits
 
-// Constantes pour les valeurs de profondeur de couleur
-#define DEFAULT_DEPTH      0x18 // 24
-
-
-typedef struct {
+typedef struct __attribute__((__packed__)) {
     uint16_t type;
     uint32_t size;
     uint16_t reserved1;
@@ -31,8 +30,7 @@ typedef struct {
     uint32_t offset;
 } t_bmp_header;
 
-
-typedef struct {
+typedef struct __attribute__((__packed__)) {
     uint32_t size;
     int32_t width;
     int32_t height;
@@ -52,8 +50,7 @@ typedef struct {
     uint8_t blue;
 } t_pixel;
 
-
-typedef struct {
+typedef struct __attribute__((__packed__)) {
     t_bmp_header header;
     t_bmp_info header_info;
     int width;
@@ -61,7 +58,6 @@ typedef struct {
     int colorDepth;
     t_pixel **data;
 } t_bmp24;
-
 
 t_pixel ** bmp24_allocateDataPixels (int width, int height);
 void bmp24_freeDataPixels (t_pixel ** pixels, int height);
@@ -89,7 +85,5 @@ void bmp24_brightness(t_bmp24 *img, int value);
 
 
 t_pixel bmp24_convolution(t_bmp24 *img, int x, int y, float **kernel, int kernelSize);
-
-
-
-#endif //BMP24_PARTIE2_H
+void bmp24_applySelectedFilter(t_bmp24 *img, int choix);
+#endif
