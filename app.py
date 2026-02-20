@@ -243,6 +243,20 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ── FORCER L'OUVERTURE DE LA SIDEBAR AU PREMIER CHARGEMENT ──
+if "sidebar_opened" not in st.session_state:
+    st.session_state.sidebar_opened = True
+    st.markdown("""
+    <script>
+        const tryOpen = setInterval(() => {
+            const btns = window.parent.document.querySelectorAll('[data-testid="collapsedControl"] button');
+            btns.forEach(b => b.click());
+            if (btns.length > 0) clearInterval(tryOpen);
+        }, 200);
+        setTimeout(() => clearInterval(tryOpen), 5000);
+    </script>
+    """, unsafe_allow_html=True)
+
 # ── COMPILE C ENGINE ──
 if not os.path.exists("./imageprocessing"):
     with st.spinner("Compilation du moteur C..."):
