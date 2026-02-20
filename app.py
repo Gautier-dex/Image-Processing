@@ -95,41 +95,20 @@ st.markdown("""
     fill: none;
     stroke-linecap: round;
 }
-/* Repositionne le bouton natif Streamlit en haut à gauche */
-[data-testid="stSidebarCollapseButton"] {
-    position: fixed !important;
-    top: 12px !important;
-    left: 12px !important;
-    z-index: 999999 !important;
+/* Bouton natif Streamlit — visible et stylisé, à sa position naturelle */
+[data-testid="stSidebarCollapseButton"] button {
     background: #16162a !important;
     border: 1px solid #2a2a40 !important;
     border-radius: 7px !important;
-    width: 36px !important;
-    height: 36px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.5) !important;
+    color: #7c6af7 !important;
     transition: all 0.2s !important;
 }
-[data-testid="stSidebarCollapseButton"]:hover {
+[data-testid="stSidebarCollapseButton"] button:hover {
     border-color: #7c6af7 !important;
     box-shadow: 0 0 16px rgba(124,106,247,0.3) !important;
 }
-[data-testid="stSidebarCollapseButton"] button {
-    background: transparent !important;
-    border: none !important;
-    color: #7c6af7 !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
 [data-testid="stSidebarCollapseButton"] svg {
     stroke: #7c6af7 !important;
-    width: 16px !important;
-    height: 16px !important;
 }
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span {
