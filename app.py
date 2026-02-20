@@ -5,8 +5,8 @@ from PIL import Image
 
 st.set_page_config(page_title="C Image Processor Pro", layout="wide")
 
-st.title("🖼️ Traitement d'Image BMP (Moteur C)")
-st.write("Déployé par Gautier - Moteur de traitement haute performance en C")
+st.title("Traitement d'Image BMP (En C)")
+st.write("Projet réalisé par Gautier Dexemple et Quentin Richard. Déploiement réalisé par Gautier Dexemple")
 
 # Compilation automatique
 if not os.path.exists("./imageprocessing"):
