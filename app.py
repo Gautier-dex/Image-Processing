@@ -189,10 +189,6 @@ st.markdown("""
 
 /* ── FILTER PANEL ── */
 .filter-panel {
-    background: #0f0f1a;
-    border: 1px solid #1e1e2e;
-    border-radius: 14px;
-    padding: 20px 24px;
     margin: 16px 0;
 }
 </style>
