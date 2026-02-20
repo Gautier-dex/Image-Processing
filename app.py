@@ -14,7 +14,6 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-/* ── GLOBAL RESET ── */
 *, *::before, *::after { box-sizing: border-box; }
 
 .stApp {
@@ -23,27 +22,18 @@ st.markdown("""
     color: #e8e6f0;
 }
 
-/* ── HIDE STREAMLIT CHROME ── */
 #MainMenu, footer, header { visibility: hidden; }
 .stDeployButton { display: none; }
 
-/* ── SIDEBAR ── */
 [data-testid="stSidebar"] {
     background: #0f0f1a;
     border-right: 1px solid #1e1e2e;
 }
-
-[data-testid="stSidebar"] .stSelectbox label,
-[data-testid="stSidebar"] .stSlider label,
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span {
     color: #a0a0b8 !important;
     font-family: 'DM Sans', sans-serif !important;
-    font-size: 0.82rem !important;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
 }
-
 [data-testid="stSidebar"] .stSelectbox > div > div {
     background: #16162a !important;
     border: 1px solid #2a2a40 !important;
@@ -51,36 +41,22 @@ st.markdown("""
     color: #e8e6f0 !important;
     font-family: 'DM Sans', sans-serif !important;
 }
-
 [data-testid="stSidebar"] .stSelectbox > div > div:focus-within {
     border-color: #7c6af7 !important;
     box-shadow: 0 0 0 2px rgba(124,106,247,0.15) !important;
 }
+[data-testid="stSlider"] > div > div > div > div { background: #7c6af7 !important; }
+[data-testid="stSlider"] > div > div > div { background: #2a2a40 !important; }
 
-/* ── SLIDER ── */
-[data-testid="stSlider"] > div > div > div > div {
-    background: #7c6af7 !important;
-}
-[data-testid="stSlider"] > div > div > div {
-    background: #2a2a40 !important;
-}
-
-/* ── FILE UPLOADER ── */
 [data-testid="stFileUploader"] {
     background: #0f0f1a;
     border: 1.5px dashed #2a2a40;
     border-radius: 12px;
     padding: 10px;
-    transition: border-color 0.2s;
 }
-[data-testid="stFileUploader"]:hover {
-    border-color: #7c6af7;
-}
-[data-testid="stFileUploader"] label {
-    color: #a0a0b8 !important;
-}
+[data-testid="stFileUploader"]:hover { border-color: #7c6af7; }
+[data-testid="stFileUploader"] label { color: #a0a0b8 !important; }
 
-/* ── BUTTON ── */
 .stButton > button {
     width: 100%;
     background: linear-gradient(135deg, #7c6af7 0%, #5a4fcf 100%);
@@ -93,20 +69,14 @@ st.markdown("""
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 4px 24px rgba(124,106,247,0.25);
 }
 .stButton > button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(124,106,247,0.4);
-    background: linear-gradient(135deg, #9080ff 0%, #7c6af7 100%);
-}
-.stButton > button:active {
-    transform: translateY(0);
 }
 
-/* ── DOWNLOAD BUTTON ── */
 [data-testid="stDownloadButton"] > button {
     width: 100%;
     background: transparent;
@@ -123,29 +93,22 @@ st.markdown("""
 }
 [data-testid="stDownloadButton"] > button:hover {
     background: rgba(124,106,247,0.1);
-    box-shadow: 0 0 20px rgba(124,106,247,0.2);
 }
 
-/* ── INFO / ERROR BOXES ── */
-.stAlert {
-    background: #16162a !important;
-    border: 1px solid #2a2a40 !important;
-    border-radius: 8px !important;
-    color: #a0a0b8 !important;
-}
-
-/* ── IMAGES ── */
 [data-testid="stImage"] img {
     border-radius: 10px;
     border: 1px solid #1e1e2e;
+    display: block;
 }
 
-/* ── SPINNER ── */
-.stSpinner > div {
-    border-top-color: #7c6af7 !important;
+.stSpinner > div { border-top-color: #7c6af7 !important; }
+
+/* Align both columns to the same top baseline */
+[data-testid="column"] {
+    display: flex !important;
+    flex-direction: column !important;
 }
 
-/* ── CUSTOM CLASSES ── */
 .bmp-title {
     font-family: 'Space Mono', monospace;
     font-size: 2.6rem;
@@ -162,35 +125,27 @@ st.markdown("""
     letter-spacing: 0.04em;
     margin-bottom: 32px;
 }
-.bmp-accent {
-    color: #7c6af7;
-}
-.panel {
-    background: #0f0f1a;
-    border: 1px solid #1e1e2e;
-    border-radius: 14px;
-    padding: 24px;
-    min-height: 420px;
-}
-.panel-label {
+.bmp-accent { color: #7c6af7; }
+
+.col-label {
     font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     color: #3a3a58;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
 }
-.panel-label::before {
+.col-label::before {
     content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
+    width: 5px; height: 5px;
     border-radius: 50%;
     background: #7c6af7;
+    display: inline-block;
 }
+
 .sidebar-logo {
     font-family: 'Space Mono', monospace;
     font-size: 1.1rem;
@@ -218,16 +173,9 @@ st.markdown("""
     letter-spacing: 0.1em;
     margin-top: 10px;
 }
-.divider {
-    border: none;
-    border-top: 1px solid #1e1e2e;
-    margin: 20px 0;
-}
-.stat-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 12px;
-}
+.divider { border: none; border-top: 1px solid #1e1e2e; margin: 20px 0; }
+
+.stat-row { display: flex; gap: 10px; margin-top: 10px; }
 .stat-box {
     flex: 1;
     background: #16162a;
@@ -253,7 +201,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── COMPILE C ENGINE ──
+# ── COMPILE ──
 if not os.path.exists("./imageprocessing"):
     with st.spinner("Compilation du moteur C..."):
         subprocess.run(["cmake", "."], capture_output=True)
@@ -286,7 +234,6 @@ with st.sidebar:
     }
 
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
-
     filter_descriptions = {
         "Négatif": "Inverse chaque canal de couleur.",
         "Luminosité": "Ajuste l'exposition globale.",
@@ -301,11 +248,10 @@ with st.sidebar:
     }
     st.markdown(f'<p style="font-family: DM Sans, sans-serif; font-size:0.82rem; color:#5a5a78; line-height:1.5;">{filter_descriptions[filtre]}</p>', unsafe_allow_html=True)
     st.markdown(f'<div class="filter-badge">CODE {mapping[filtre]:02d}</div>', unsafe_allow_html=True)
-
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
     st.markdown('<p style="font-family: Space Mono, monospace; font-size:0.65rem; color:#2a2a3a; letter-spacing:0.08em;">C · CMake · BMP8/24 · Convolution</p>', unsafe_allow_html=True)
 
-# ── MAIN BODY ──
+# ── MAIN ──
 st.markdown('<div class="bmp-title">Image<span class="bmp-accent">.</span>Process</div>', unsafe_allow_html=True)
 st.markdown('<div class="bmp-subtitle">Moteur de traitement BMP — 8 & 24 bits — pipeline C natif</div>', unsafe_allow_html=True)
 
@@ -313,16 +259,11 @@ uploaded_file = st.file_uploader("", type=['bmp'], label_visibility="collapsed")
 
 if not uploaded_file:
     st.markdown("""
-    <div style="
-        background: #0f0f1a;
-        border: 1.5px dashed #1e1e2e;
-        border-radius: 14px;
-        padding: 60px 40px;
-        text-align: center;
-        margin-top: 10px;
-    ">
-        <div style="font-size: 2.5rem; margin-bottom: 16px; opacity: 0.3;">◈</div>
-        <p style="font-family: Space Mono, monospace; font-size: 0.78rem; color: #3a3a58; letter-spacing: 0.12em; text-transform: uppercase;">
+    <div style="background:#0f0f1a; border:1.5px dashed #1e1e2e; border-radius:14px;
+                padding:60px 40px; text-align:center; margin-top:10px;">
+        <div style="font-size:2.5rem; margin-bottom:16px; opacity:0.3;">◈</div>
+        <p style="font-family: Space Mono, monospace; font-size:0.78rem; color:#3a3a58;
+                  letter-spacing:0.12em; text-transform:uppercase;">
             Chargez un fichier .bmp ci-dessus pour commencer
         </p>
     </div>
@@ -330,24 +271,23 @@ if not uploaded_file:
 else:
     if os.path.exists("output.bmp"):
         os.remove("output.bmp")
-
     with open("input.bmp", "wb") as f:
         f.write(uploaded_file.getbuffer())
 
-    # Get image info
     try:
         pil_img = Image.open("input.bmp")
         img_w, img_h = pil_img.size
-        img_mode = pil_img.mode
         img_size_kb = round(os.path.getsize("input.bmp") / 1024, 1)
     except:
-        img_w, img_h, img_mode, img_size_kb = "—", "—", "—", "—"
+        img_w, img_h, img_size_kb = "—", "—", "—"
+
+    # ── Button sits ABOVE the two columns so both images start at the same height ──
+    apply = st.button(f"▶  Appliquer · {filtre.upper()}")
 
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
-        st.markdown('<div class="panel">', unsafe_allow_html=True)
-        st.markdown('<div class="panel-label">Original</div>', unsafe_allow_html=True)
+        st.markdown('<div class="col-label">Original</div>', unsafe_allow_html=True)
         st.image("input.bmp", use_container_width=True)
         st.markdown(f"""
         <div class="stat-row">
@@ -365,27 +305,23 @@ else:
             </div>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown('<div class="panel">', unsafe_allow_html=True)
-        st.markdown(f'<div class="panel-label">Résultat — {filtre}</div>', unsafe_allow_html=True)
-
-        apply = st.button(f"▶ Appliquer · {filtre.upper()}")
+        st.markdown(f'<div class="col-label">Résultat — {filtre}</div>', unsafe_allow_html=True)
 
         if apply:
             with st.spinner(""):
-                cmd = ["./imageprocessing", "input.bmp", "output.bmp", str(mapping[filtre]), str(valeur)]
+                cmd = ["./imageprocessing", "input.bmp", "output.bmp",
+                       str(mapping[filtre]), str(valeur)]
                 result = subprocess.run(cmd, capture_output=True, text=True)
 
                 if os.path.exists("output.bmp"):
                     st.image("output.bmp", use_container_width=True)
-                    st.markdown("<div style='height: 12px'></div>", unsafe_allow_html=True)
+                    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
                     with open("output.bmp", "rb") as f:
                         st.download_button(
-                            "↓ Télécharger le résultat",
-                            f,
-                            file_name=f"resultat_{filtre.lower().replace(' ','_')}.bmp",
+                            "↓ Télécharger le résultat", f,
+                            file_name=f"resultat_{filtre.lower().replace(' ', '_')}.bmp",
                             mime="image/bmp"
                         )
                 else:
@@ -394,20 +330,12 @@ else:
                         st.code(result.stderr, language="bash")
         else:
             st.markdown("""
-            <div style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 280px;
-                gap: 12px;
-            ">
-                <div style="font-size:2rem; opacity:0.12;">◈</div>
-                <p style="font-family: Space Mono, monospace; font-size: 0.7rem;
-                   color: #2a2a40; letter-spacing: 0.12em; text-transform: uppercase;">
+            <div style="display:flex; flex-direction:column; align-items:center;
+                        justify-content:center; min-height:300px; gap:12px;">
+                <div style="font-size:2rem; opacity:0.08;">◈</div>
+                <p style="font-family: Space Mono, monospace; font-size:0.7rem;
+                           color:#2a2a40; letter-spacing:0.12em; text-transform:uppercase; margin:0;">
                     En attente du traitement
                 </p>
             </div>
             """, unsafe_allow_html=True)
-
-        st.markdown('</div>', unsafe_allow_html=True)
