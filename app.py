@@ -164,7 +164,7 @@ button[data-testid="baseButton-header"] {
 .col-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.66rem;
-    color: #3a3a58;
+    color: #a0a0c8;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     margin-bottom: 10px;
@@ -286,8 +286,8 @@ with st.sidebar:
     st.markdown('<p style="font-family: Space Mono, monospace; font-size:0.65rem; color:#2a2a3a; letter-spacing:0.08em;">C · CMake · BMP8/24 · Convolution</p>', unsafe_allow_html=True)
 
 # ── MAIN ──
-st.markdown('<div class="bmp-title">Image<span class="bmp-accent">.</span>Process</div>', unsafe_allow_html=True)
-st.markdown('<div class="bmp-subtitle">Moteur de traitement BMP — 8 & 24 bits — pipeline C natif</div>', unsafe_allow_html=True)
+st.markdown('<div class="bmp-title">Image Processing<span class="bmp-accent"> –</span> C</div>', unsafe_allow_html=True)
+st.markdown('<div class="bmp-subtitle">Moteur de traitement BMP - 8 & 24 bits - pipeline C natif</div>', unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader("", type=['bmp'], label_visibility="collapsed")
 
