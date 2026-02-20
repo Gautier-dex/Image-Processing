@@ -64,7 +64,38 @@ st.markdown("""
     display: block !important;
     min-width: 240px !important;
 }
-/* Hide the sidebar toggle button */
+/* Custom sidebar toggle button — fixed top-left */
+#sidebar-toggle {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 99999;
+    background: #16162a;
+    border: 1px solid #2a2a40;
+    border-radius: 7px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+#sidebar-toggle:hover {
+    background: #1e1e38;
+    border-color: #7c6af7;
+    box-shadow: 0 0 16px rgba(124,106,247,0.25);
+}
+#sidebar-toggle svg {
+    width: 16px;
+    height: 16px;
+    stroke: #7c6af7;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+}
+/* Keep native Streamlit button hidden */
 [data-testid="stSidebarCollapseButton"] {
     display: none !important;
 }
@@ -241,7 +272,34 @@ if not os.path.exists("./imageprocessing"):
         subprocess.run(["cmake", "."], capture_output=True)
         subprocess.run(["make"], capture_output=True)
 
-# ── SIDEBAR ──
+# ── SIDEBAR TOGGLE BUTTON ──
+st.markdown("""
+<div id="sidebar-toggle" onclick="toggleSidebar()" title="Afficher/masquer le panneau">
+    <svg viewBox="0 0 24 24">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+</div>
+<script>
+function toggleSidebar() {
+    const btn = window.parent.document.querySelector('[data-testid="stSidebarCollapseButton"] button');
+    if (btn) {
+        btn.click();
+    } else {
+        // fallback: toggle via sidebar element directly
+        const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+        if (sidebar) {
+            const isCollapsed = sidebar.getAttribute('aria-expanded') === 'false';
+            sidebar.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
+            sidebar.style.transform = isCollapsed ? 'none' : 'translateX(-100%)';
+        }
+    }
+}
+</script>
+""", unsafe_allow_html=True)
+
+
 with st.sidebar:
     st.markdown('<div class="sidebar-logo">◈ BMP Studio</div>', unsafe_allow_html=True)
     st.markdown('<div class="sidebar-tag">Image Processing Engine · C Backend</div>', unsafe_allow_html=True)
