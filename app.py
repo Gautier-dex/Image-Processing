@@ -6,33 +6,8 @@ from PIL import Image
 st.set_page_config(
     page_title="Image Processing – C",
     page_icon="◈",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
-
-# Force la sidebar ouverte via JS au premier chargement
-# (Streamlit Cloud ignore parfois initial_sidebar_state)
-st.markdown("""
-<script>
-window.addEventListener('load', function() {
-    function openSidebar() {
-        // Cherche le bouton "ouvrir" quand la sidebar est fermée
-        var btns = window.parent.document.querySelectorAll(
-            '[data-testid="collapsedControl"] button, ' +
-            '[data-testid="stSidebarCollapseButton"] button'
-        );
-        btns.forEach(function(btn) {
-            var expanded = btn.getAttribute('aria-expanded');
-            if (expanded === 'false' || expanded === null) {
-                btn.click();
-            }
-        });
-    }
-    setTimeout(openSidebar, 500);
-    setTimeout(openSidebar, 1500);
-});
-</script>
-""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -49,29 +24,32 @@ st.markdown("""
 #MainMenu, footer, header { visibility: hidden; }
 .stDeployButton { display: none; }
 
-/* ── SIDEBAR ── */
-[data-testid="stSidebar"] {
-    background: #0f0f1a;
-    border-right: 1px solid #1e1e2e;
-}
-[data-testid="stSidebar"] p,
-[data-testid="stSidebar"] span {
-    color: #a0a0b8 !important;
-    font-family: 'DM Sans', sans-serif !important;
-}
-[data-testid="stSidebar"] .stSelectbox > div > div {
+/* ── SELECTBOX ── */
+[data-testid="stSelectbox"] > div > div {
     background: #16162a !important;
     border: 1px solid #2a2a40 !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
     color: #e8e6f0 !important;
+    font-family: 'DM Sans', sans-serif !important;
 }
-[data-testid="stSidebar"] .stSelectbox > div > div:focus-within {
-    border-color: #7c6af7 !important;
+[data-testid="stSelectbox"] label {
+    color: #a0a0c8 !important;
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
 }
 
 /* ── SLIDER ── */
 [data-testid="stSlider"] > div > div > div > div { background: #7c6af7 !important; }
 [data-testid="stSlider"] > div > div > div { background: #2a2a40 !important; }
+[data-testid="stSlider"] label {
+    color: #a0a0c8 !important;
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+}
 
 /* ── FILE UPLOADER ── */
 [data-testid="stFileUploader"] {
@@ -141,7 +119,6 @@ st.markdown("""
     border: 1px solid #1e1e2e;
     display: block;
 }
-
 .stSpinner > div { border-top-color: #7c6af7 !important; }
 [data-testid="column"] {
     display: flex !important;
@@ -163,7 +140,7 @@ st.markdown("""
     font-size: 0.9rem;
     color: #5a5a78;
     letter-spacing: 0.04em;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 .bmp-accent { color: #7c6af7; }
 
@@ -185,35 +162,6 @@ st.markdown("""
     background: #7c6af7;
     display: inline-block;
 }
-
-.sidebar-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
-}
-.sidebar-tag {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.75rem;
-    color: #3a3a58;
-    margin-bottom: 28px;
-    letter-spacing: 0.06em;
-}
-.filter-badge {
-    display: inline-block;
-    background: rgba(124,106,247,0.12);
-    color: #7c6af7;
-    border: 1px solid rgba(124,106,247,0.25);
-    border-radius: 4px;
-    padding: 3px 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    margin-top: 10px;
-}
-.divider { border: none; border-top: 1px solid #1e1e2e; margin: 20px 0; }
 
 .stat-row { display: flex; gap: 10px; margin-top: 10px; }
 .stat-box {
@@ -238,6 +186,15 @@ st.markdown("""
     color: #e8e6f0;
     font-weight: 700;
 }
+
+/* ── FILTER PANEL ── */
+.filter-panel {
+    background: #0f0f1a;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 16px 0;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -256,8 +213,8 @@ mapping = {
 filter_descriptions = {
     "Négatif": "Inverse chaque canal de couleur.",
     "Luminosité": "Ajuste l'exposition globale.",
-    "Binarisation (8bit)": "Seuillage noir/blanc.",
-    "Gris (24bit)": "Conversion en niveaux de gris.",
+    "Binarisation (8bit)": "Seuillage noir/blanc — 8 bits.",
+    "Gris (24bit)": "Conversion en niveaux de gris — 24 bits.",
     "Flou": "Filtre box blur 3×3.",
     "Flou Gaussien": "Lissage gaussien doux.",
     "Netteté": "Accentue les bords et détails.",
@@ -266,35 +223,36 @@ filter_descriptions = {
     "Égalisation": "Égalisation d'histogramme."
 }
 
-# ── SIDEBAR ──
-with st.sidebar:
-    st.markdown('<div class="sidebar-logo">◈ BMP Studio</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sidebar-tag">Image Processing Engine · C Backend</div>', unsafe_allow_html=True)
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
-
-    st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.68rem;color:#3a3a58;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;">Filtre</p>', unsafe_allow_html=True)
-    filtre = st.selectbox("", list(mapping.keys()), label_visibility="collapsed")
-
-    valeur = 0
-    if filtre == "Luminosité":
-        st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.68rem;color:#3a3a58;letter-spacing:0.14em;text-transform:uppercase;margin:16px 0 6px;">Intensité</p>', unsafe_allow_html=True)
-        valeur = st.slider("", -100, 100, 30, label_visibility="collapsed")
-    elif filtre == "Binarisation (8bit)":
-        st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.68rem;color:#3a3a58;letter-spacing:0.14em;text-transform:uppercase;margin:16px 0 6px;">Seuil</p>', unsafe_allow_html=True)
-        valeur = st.slider("", 0, 255, 128, label_visibility="collapsed")
-
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
-    st.markdown(f'<p style="font-family:DM Sans,sans-serif;font-size:0.82rem;color:#5a5a78;line-height:1.5;">{filter_descriptions[filtre]}</p>', unsafe_allow_html=True)
-    st.markdown(f'<div class="filter-badge">CODE {mapping[filtre]:02d}</div>', unsafe_allow_html=True)
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
-    st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.65rem;color:#2a2a3a;letter-spacing:0.08em;">C · CMake · BMP8/24 · Convolution</p>', unsafe_allow_html=True)
-
-# ── MAIN ──
+# ── HEADER ──
 st.markdown('<div class="bmp-title">Image Processing<span class="bmp-accent"> –</span> C</div>', unsafe_allow_html=True)
 st.markdown('<div class="bmp-subtitle">Moteur de traitement BMP - 8 & 24 bits - pipeline C natif</div>', unsafe_allow_html=True)
 
+# ── FILE UPLOADER — toujours en haut ──
 uploaded_file = st.file_uploader("", type=['bmp'], label_visibility="collapsed")
 
+# ── FILTER PANEL — toujours visible sous l'uploader ──
+st.markdown('<div class="filter-panel">', unsafe_allow_html=True)
+col_a, col_b = st.columns([2, 3])
+
+with col_a:
+    filtre = st.selectbox("Filtre", list(mapping.keys()))
+
+valeur = 0
+with col_b:
+    if filtre == "Luminosité":
+        valeur = st.slider("Intensité", -100, 100, 30)
+    elif filtre == "Binarisation (8bit)":
+        valeur = st.slider("Seuil", 0, 255, 128)
+    else:
+        st.markdown(
+            f'<div style="padding-top:28px;font-family:DM Sans,sans-serif;'
+            f'font-size:0.85rem;color:#5a5a78;">{filter_descriptions[filtre]}</div>',
+            unsafe_allow_html=True
+        )
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# ── IMAGE PROCESSING ──
 if not uploaded_file:
     st.markdown("""
     <div style="background:#0f0f1a;border:1.5px dashed #1e1e2e;border-radius:14px;
