@@ -6,7 +6,8 @@ from PIL import Image
 st.set_page_config(
     page_title="Image Processing – C",
     page_icon="◈",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 st.markdown("""
@@ -24,17 +25,36 @@ st.markdown("""
 #MainMenu, footer, header { visibility: hidden; }
 .stDeployButton { display: none; }
 
+/* ── SIDEBAR ── */
+[data-testid="stSidebar"] {
+    background: #0f0f1a;
+    border-right: 1px solid #1e1e2e;
+}
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span {
+    color: #a0a0b8 !important;
+    font-family: 'DM Sans', sans-serif !important;
+}
+[data-testid="stSidebar"] .stSelectbox > div > div {
+    background: #16162a !important;
+    border: 1px solid #2a2a40 !important;
+    border-radius: 6px !important;
+    color: #e8e6f0 !important;
+}
+[data-testid="stSidebar"] .stSelectbox > div > div:focus-within {
+    border-color: #7c6af7 !important;
+}
+
+/* ── SLIDER ── */
+[data-testid="stSlider"] > div > div > div > div { background: #7c6af7 !important; }
+[data-testid="stSlider"] > div > div > div { background: #2a2a40 !important; }
+
 /* ── FILE UPLOADER ── */
 [data-testid="stFileUploader"] {
     background: #0f0f1a;
     border: 1.5px dashed #7c6af7;
     border-radius: 12px;
     padding: 10px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-[data-testid="stFileUploader"]:hover {
-    border-color: #9080ff;
-    box-shadow: 0 0 24px rgba(124,106,247,0.15);
 }
 [data-testid="stFileUploaderDropzone"] button {
     background: linear-gradient(135deg, #7c6af7 0%, #5a4fcf 100%) !important;
@@ -48,35 +68,7 @@ st.markdown("""
     box-shadow: 0 2px 12px rgba(124,106,247,0.3) !important;
 }
 [data-testid="stFileUploaderDropzone"] button:hover {
-    box-shadow: 0 4px 20px rgba(124,106,247,0.5) !important;
     background: linear-gradient(135deg, #9080ff 0%, #7c6af7 100%) !important;
-}
-
-/* ── SELECTBOX ── */
-[data-testid="stSelectbox"] > div > div {
-    background: #16162a !important;
-    border: 1px solid #2a2a40 !important;
-    border-radius: 8px !important;
-    color: #e8e6f0 !important;
-    font-family: 'DM Sans', sans-serif !important;
-}
-[data-testid="stSelectbox"] label {
-    color: #a0a0b8 !important;
-    font-family: 'Space Mono', monospace !important;
-    font-size: 0.68rem !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
-}
-
-/* ── SLIDER ── */
-[data-testid="stSlider"] > div > div > div > div { background: #7c6af7 !important; }
-[data-testid="stSlider"] > div > div > div { background: #2a2a40 !important; }
-[data-testid="stSlider"] label {
-    color: #a0a0b8 !important;
-    font-family: 'Space Mono', monospace !important;
-    font-size: 0.68rem !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
 }
 
 /* ── APPLY BUTTON ── */
@@ -133,52 +125,6 @@ st.markdown("""
     flex-direction: column !important;
 }
 
-/* ── CONTROL PANEL ── */
-.control-panel {
-    background: #0f0f1a;
-    border: 1px solid #1e1e2e;
-    border-radius: 14px;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-}
-.panel-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    color: #3a3a58;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.panel-title::before {
-    content: '';
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: #7c6af7;
-    display: inline-block;
-}
-.filter-desc {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem;
-    color: #5a5a78;
-    margin-top: 8px;
-    line-height: 1.5;
-}
-.filter-badge {
-    display: inline-block;
-    background: rgba(124,106,247,0.12);
-    color: #7c6af7;
-    border: 1px solid rgba(124,106,247,0.25);
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    margin-top: 6px;
-}
-
 /* ── TYPOGRAPHY ── */
 .bmp-title {
     font-family: 'Space Mono', monospace;
@@ -216,7 +162,35 @@ st.markdown("""
     background: #7c6af7;
     display: inline-block;
 }
-.divider { border: none; border-top: 1px solid #1e1e2e; margin: 16px 0; }
+
+.sidebar-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+.sidebar-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: #3a3a58;
+    margin-bottom: 28px;
+    letter-spacing: 0.06em;
+}
+.filter-badge {
+    display: inline-block;
+    background: rgba(124,106,247,0.12);
+    color: #7c6af7;
+    border: 1px solid rgba(124,106,247,0.25);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    margin-top: 10px;
+}
+.divider { border: none; border-top: 1px solid #1e1e2e; margin: 20px 0; }
 
 .stat-row { display: flex; gap: 10px; margin-top: 10px; }
 .stat-box {
@@ -250,11 +224,7 @@ if not os.path.exists("./imageprocessing"):
         subprocess.run(["cmake", "."], capture_output=True)
         subprocess.run(["make"], capture_output=True)
 
-# ── HEADER ──
-st.markdown('<div class="bmp-title">Image Processing<span class="bmp-accent"> –</span> C</div>', unsafe_allow_html=True)
-st.markdown('<div class="bmp-subtitle">Moteur de traitement BMP - 8 & 24 bits - pipeline C natif</div>', unsafe_allow_html=True)
-
-# ── CONTROL PANEL (dans la page principale) ──
+# ── MAPPING & DESCRIPTIONS ──
 mapping = {
     "Négatif": 1, "Luminosité": 2, "Binarisation (8bit)": 3,
     "Gris (24bit)": 4, "Flou": 5, "Flou Gaussien": 6, "Netteté": 7,
@@ -263,8 +233,8 @@ mapping = {
 filter_descriptions = {
     "Négatif": "Inverse chaque canal de couleur.",
     "Luminosité": "Ajuste l'exposition globale.",
-    "Binarisation (8bit)": "Seuillage noir/blanc — 8 bits uniquement.",
-    "Gris (24bit)": "Conversion en niveaux de gris — 24 bits uniquement.",
+    "Binarisation (8bit)": "Seuillage noir/blanc.",
+    "Gris (24bit)": "Conversion en niveaux de gris.",
     "Flou": "Filtre box blur 3×3.",
     "Flou Gaussien": "Lissage gaussien doux.",
     "Netteté": "Accentue les bords et détails.",
@@ -273,26 +243,33 @@ filter_descriptions = {
     "Égalisation": "Égalisation d'histogramme."
 }
 
-st.markdown('<div class="control-panel"><div class="panel-title">Réglages</div>', unsafe_allow_html=True)
+# ── SIDEBAR ──
+with st.sidebar:
+    st.markdown('<div class="sidebar-logo">◈ BMP Studio</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-tag">Image Processing Engine · C Backend</div>', unsafe_allow_html=True)
+    st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
-ctrl1, ctrl2, ctrl3 = st.columns([2, 1, 1])
+    st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.68rem;color:#3a3a58;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;">Filtre</p>', unsafe_allow_html=True)
+    filtre = st.selectbox("", list(mapping.keys()), label_visibility="collapsed")
 
-with ctrl1:
-    filtre = st.selectbox("Filtre", list(mapping.keys()))
-
-valeur = 0
-with ctrl2:
+    valeur = 0
     if filtre == "Luminosité":
-        valeur = st.slider("Intensité", -100, 100, 30)
+        st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.68rem;color:#3a3a58;letter-spacing:0.14em;text-transform:uppercase;margin:16px 0 6px;">Intensité</p>', unsafe_allow_html=True)
+        valeur = st.slider("", -100, 100, 30, label_visibility="collapsed")
     elif filtre == "Binarisation (8bit)":
-        valeur = st.slider("Seuil", 0, 255, 128)
-    else:
-        st.markdown(f'<div class="filter-desc">{filter_descriptions[filtre]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="filter-badge">CODE {mapping[filtre]:02d}</div>', unsafe_allow_html=True)
+        st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.68rem;color:#3a3a58;letter-spacing:0.14em;text-transform:uppercase;margin:16px 0 6px;">Seuil</p>', unsafe_allow_html=True)
+        valeur = st.slider("", 0, 255, 128, label_visibility="collapsed")
 
-st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown(f'<p style="font-family:DM Sans,sans-serif;font-size:0.82rem;color:#5a5a78;line-height:1.5;">{filter_descriptions[filtre]}</p>', unsafe_allow_html=True)
+    st.markdown(f'<div class="filter-badge">CODE {mapping[filtre]:02d}</div>', unsafe_allow_html=True)
+    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown('<p style="font-family:Space Mono,monospace;font-size:0.65rem;color:#2a2a3a;letter-spacing:0.08em;">C · CMake · BMP8/24 · Convolution</p>', unsafe_allow_html=True)
 
-# ── FILE UPLOADER ──
+# ── MAIN ──
+st.markdown('<div class="bmp-title">Image Processing<span class="bmp-accent"> –</span> C</div>', unsafe_allow_html=True)
+st.markdown('<div class="bmp-subtitle">Moteur de traitement BMP - 8 & 24 bits - pipeline C natif</div>', unsafe_allow_html=True)
+
 uploaded_file = st.file_uploader("", type=['bmp'], label_visibility="collapsed")
 
 if not uploaded_file:
