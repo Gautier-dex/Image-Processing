@@ -272,30 +272,76 @@ if not os.path.exists("./imageprocessing"):
         subprocess.run(["cmake", "."], capture_output=True)
         subprocess.run(["make"], capture_output=True)
 
-# ── SIDEBAR TOGGLE BUTTON ──
+# ── SIDEBAR TOGGLE BUTTON (injecté dans window.parent via components) ──
 st.markdown("""
-<div id="sidebar-toggle" onclick="toggleSidebar()" title="Afficher/masquer le panneau">
-    <svg viewBox="0 0 24 24">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-    </svg>
+<style>
+/* Bouton toggle fixe en haut à gauche dans le DOM principal */
+#custom-toggle-btn {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 999999;
+    background: #16162a;
+    border: 1px solid #2a2a40;
+    border-radius: 7px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+#custom-toggle-btn:hover {
+    border-color: #7c6af7;
+    box-shadow: 0 0 16px rgba(124,106,247,0.3);
+}
+</style>
+<div id="custom-toggle-btn" title="Ouvrir/fermer le panneau">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+       stroke="#7c6af7" stroke-width="2.5" stroke-linecap="round">
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
 </div>
 <script>
-function toggleSidebar() {
-    const btn = window.parent.document.querySelector('[data-testid="stSidebarCollapseButton"] button');
-    if (btn) {
-        btn.click();
-    } else {
-        // fallback: toggle via sidebar element directly
-        const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-        if (sidebar) {
-            const isCollapsed = sidebar.getAttribute('aria-expanded') === 'false';
-            sidebar.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
-            sidebar.style.transform = isCollapsed ? 'none' : 'translateX(-100%)';
+(function() {
+    function doToggle() {
+        // Cherche le bouton natif Streamlit dans le document parent
+        var p = window.parent || window;
+        var btn = p.document.querySelector('[data-testid="stSidebarCollapseButton"] button');
+        if (!btn) btn = p.document.querySelector('button[kind="header"]');
+        if (!btn) btn = p.document.querySelector('[data-testid="collapsedControl"] button');
+        if (btn) { btn.click(); return; }
+        // Fallback : toggle manual sur la sidebar
+        var sb = p.document.querySelector('[data-testid="stSidebar"]');
+        if (sb) {
+            var cur = sb.style.transform;
+            sb.style.transition = 'transform 0.3s ease';
+            sb.style.transform = cur === 'translateX(-100%)' ? 'none' : 'translateX(-100%)';
         }
     }
-}
+    // Injecte le bouton dans window.parent.document pour échapper à l'iframe
+    try {
+        var p = window.parent.document;
+        if (!p.getElementById('injected-toggle')) {
+            var btn = p.createElement('div');
+            btn.id = 'injected-toggle';
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c6af7" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+            btn.style.cssText = 'position:fixed;top:12px;left:12px;z-index:999999;background:#16162a;border:1px solid #2a2a40;border-radius:7px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.5);transition:all 0.2s;';
+            btn.onmouseenter = function(){ this.style.borderColor='#7c6af7'; this.style.boxShadow='0 0 16px rgba(124,106,247,0.3)'; };
+            btn.onmouseleave = function(){ this.style.borderColor='#2a2a40'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.5)'; };
+            btn.onclick = doToggle;
+            p.body.appendChild(btn);
+        }
+    } catch(e) {
+        // Si cross-origin bloqué, le bouton dans l'iframe sert de fallback
+        var local = document.getElementById('custom-toggle-btn');
+        if (local) local.onclick = doToggle;
+    }
+})();
 </script>
 """, unsafe_allow_html=True)
 
