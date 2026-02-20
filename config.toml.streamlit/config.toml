@@ -1,5 +1,2 @@
 [ui]
 hideSidebarNav = false
-
-[server]
-runOnSave = true
