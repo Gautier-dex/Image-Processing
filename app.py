@@ -59,6 +59,15 @@ st.markdown("""
 [data-testid="stSidebar"] {
     background: #0f0f1a;
     border-right: 1px solid #1e1e2e;
+    transform: none !important;
+    visibility: visible !important;
+    display: block !important;
+    min-width: 240px !important;
+}
+/* Force the sidebar toggle button to always show "open" state */
+[data-testid="stSidebarCollapseButton"] {
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span {
