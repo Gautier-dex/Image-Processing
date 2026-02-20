@@ -1,14 +1,14 @@
 #include "bmp8.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "Bonus-Affichage-utilisateur.h"
 //Début des fonctions du 1.2
 
 t_bmp8 * bmp8_loadImage(const char * filename) {
     //fonction qui ouvre l'image et récupère les informations de l'image tel que la taille en terme de pixel :je crois(hauteur , largeur), la profondeur de couleur et la taille de donnée
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
-        printf("Erreur : impossible d'ouvrir le fichier %s.\n", filename);
+
         return NULL;
     }
 
@@ -31,31 +31,27 @@ t_bmp8 * bmp8_loadImage(const char * filename) {
 
 
 
-void bmp8_saveImage(const char * filename, t_bmp8 * img) {
-    // "écrit" l'image dans le fichier en paramètre
+void bmp8_saveImage(const char *filename, t_bmp8 *img) {
     FILE *file = fopen(filename, "wb");
-    if (file == NULL) {
-        printf("Erreur : impossible d'ouvrir le fichier %s.\n", filename);
-        return;
-    }
+    if (img == NULL || file == NULL) return;
 
-    // header
+    // Ecriture du header
     if (fwrite(img->header, sizeof(unsigned char), 54, file) != 54) {
-        printf( "Erreur lors de l’écriture du header.\n");
+        printf("Erreur lors de l’ecriture du header.\n");
         fclose(file);
         return;
     }
 
-    //  colorTable
+    // Ecriture de colorTable
     if (fwrite(img->colorTable, sizeof(unsigned char), 1024, file) != 1024) {
-        printf( "Erreur lors de l’écriture de la table de couleurs.\n");
+        printf("Erreur lors de l’ecriture de la palette de couleurs.\n");
         fclose(file);
         return;
     }
 
-    //  données de l’image
+    // Ecriture de data , t'as compris c'est toujours la même chose
     if (fwrite(img->data, sizeof(unsigned char), img->dataSize, file) != img->dataSize) {
-        printf( "Erreur lors de l’écriture des données de l’image.\n");
+        printf("Erreur lors de l’ecriture des données de pixels.\n");
         fclose(file);
         return;
     }
@@ -65,8 +61,9 @@ void bmp8_saveImage(const char * filename, t_bmp8 * img) {
 
 
 
+
 void bmp8_free(t_bmp8 * img) {
-    //libère la mémoire alloué de l'image
+
     if (img != NULL) {
         free(img->data);
         free(img);
@@ -75,9 +72,8 @@ void bmp8_free(t_bmp8 * img) {
 
 
 void bmp8_printInfo(t_bmp8 * img) {
-    // permet d'écrire les informations de l'images ( de l'afficher à l'utilisateur)
-    if (img != NULL) {
 
+    if (img != NULL) {
         printf("Image Info :\n");
         printf("Width : %d\n", img->width) ;
         printf("Height : %d\n", img->height);
@@ -123,11 +119,12 @@ void bmp8_threshold(t_bmp8 * img, int threshold) {
 }
 
 
-void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
+void bmp8_applyFilter(t_bmp8 * img, int choix, int kernelSize) { // je me permet de changer ici les paramètres de la fonction pour utiliser ma fonction bonus sur les noyaux.
 
     bmp8_saveImage("temp.bmp", img);                  // Sauvegarde de l'image temporaire , car besoin d'une copie de l'image.
     t_bmp8 *copie = bmp8_loadImage("temp.bmp");       // il va falloir modifier les pixels au fur et à mesure mais si on modifie directement les pixels de l'image cela va impacter la modification des autres pixels aux tours et donc rien n'iras. C'est pourquoi on passe ici par une copie de l'image pour éviter de fausser toutes les valeurs.
 
+    float **kernel = choix_kernel(choix); // J'appelle ici ma fonction bonus d'un autre fichier :)
     float somme;
 
     for (int y = kernelSize / 2; y <= img->height -  2 ; y++) {  //on met kernelSize / 2 pour pouvoir automatiser pour toutes tailles de kernel mais dans notre cas juste mettre 1 aurait suffit car on est sur un kernel de 3 * 3.
@@ -161,3 +158,5 @@ void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
 
     bmp8_free(copie);
 }
+
+
