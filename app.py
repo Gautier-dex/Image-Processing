@@ -59,10 +59,6 @@ st.markdown("""
 [data-testid="stSidebar"] {
     background: #0f0f1a;
     border-right: 1px solid #1e1e2e;
-    transform: none !important;
-    visibility: visible !important;
-    display: block !important;
-    min-width: 240px !important;
 }
 /* Custom sidebar toggle button — fixed top-left */
 #sidebar-toggle {
