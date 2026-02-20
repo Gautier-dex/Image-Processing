@@ -25,6 +25,56 @@ st.markdown("""
 #MainMenu, footer, header { visibility: hidden; }
 .stDeployButton { display: none; }
 
+/* ── LOCK SIDEBAR — hide the collapse arrow ── */
+[data-testid="stSidebarCollapseButton"] { display: none !important; }
+button[kind="header"] { display: none !important; }
+
+/* ── FILE UPLOADER — make browse button pop ── */
+[data-testid="stFileUploader"] {
+    background: #0f0f1a;
+    border: 1.5px dashed #7c6af7;
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+[data-testid="stFileUploader"]:hover {
+    border-color: #9080ff;
+    box-shadow: 0 0 24px rgba(124,106,247,0.15);
+}
+[data-testid="stFileUploaderDropzone"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+/* The "Browse files" button inside the uploader */
+[data-testid="stFileUploaderDropzone"] button {
+    background: linear-gradient(135deg, #7c6af7 0%, #5a4fcf 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 28px !important;
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 4px 20px rgba(124,106,247,0.35) !important;
+    transition: all 0.2s ease !important;
+}
+[data-testid="stFileUploaderDropzone"] button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 28px rgba(124,106,247,0.5) !important;
+    background: linear-gradient(135deg, #9080ff 0%, #7c6af7 100%) !important;
+}
+[data-testid="stFileUploaderDropzone"] small,
+[data-testid="stFileUploaderDropzone"] p {
+    color: #3a3a58 !important;
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.08em !important;
+}
+
 [data-testid="stSidebar"] {
     background: #0f0f1a;
     border-right: 1px solid #1e1e2e;
